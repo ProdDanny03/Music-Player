@@ -8,8 +8,16 @@ import soundfile as sf
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel,
-    QPushButton, QScrollArea, QSlider, QHBoxLayout, QFrame
+    QApplication,
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QSlider,
+    QHBoxLayout,
+    QFrame,
 )
 from PySide6.QtCore import Qt, QObject, Signal, QTimer
 
@@ -61,10 +69,10 @@ class TrackPlayer:
             outdata.fill(0)
             return
         with self.lock:
-            data = self.sf.read(frames, dtype='float32', always_2d=True)
+            data = self.sf.read(frames, dtype="float32", always_2d=True)
             if len(data) < frames:
-                outdata[:len(data)] = data * self.volume
-                outdata[len(data):].fill(0)
+                outdata[: len(data)] = data * self.volume
+                outdata[len(data) :].fill(0)
                 if self.finished_callback:
                     Thread(target=self.finished_callback, daemon=True).start()
                 raise sd.CallbackStop()
@@ -77,7 +85,7 @@ class TrackPlayer:
             samplerate=self.samplerate,
             channels=self.channels,
             blocksize=2048,
-            callback=self.callback
+            callback=self.callback,
         )
         self.stream.start()
 
@@ -139,8 +147,15 @@ class Track:
 class ClickableSlider(QSlider):
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
-            pos = event.position().x() if hasattr(event, "position") else event.x()
-            value = self.minimum() + (self.maximum() - self.minimum()) * pos / self.width()
+            pos = (
+                event.position().x()
+                if hasattr(event, "position")
+                else event.x()
+            )
+            value = (
+                self.minimum()
+                + (self.maximum() - self.minimum()) * pos / self.width()
+            )
             self.setValue(int(value))
             self.sliderMoved.emit(int(value))
         super().mousePressEvent(event)
@@ -236,7 +251,9 @@ class MusicPlayer(QMainWindow):
         # ── File watcher
         self.watcher = Observer()
         self.event_handler = MusicWatcher(self.ui_signals)
-        self.watcher.schedule(self.event_handler, str(MUSIC_DIR), recursive=True)
+        self.watcher.schedule(
+            self.event_handler, str(MUSIC_DIR), recursive=True
+        )
         self.watcher.start()
 
         # ── Timer for progress updates
@@ -252,14 +269,24 @@ class MusicPlayer(QMainWindow):
         self.loop_mode = mode
         active_style = "background-color: #bb0066;"  # slightly darker pink
         inactive_style = "background-color: deeppink;"
-        
-        self.loop_none_btn.setStyleSheet(active_style if mode == "none" else inactive_style)
-        self.loop_list_btn.setStyleSheet(active_style if mode == "list" else inactive_style)
-        self.loop_song_btn.setStyleSheet(active_style if mode == "song" else inactive_style)
+
+        self.loop_none_btn.setStyleSheet(
+            active_style if mode == "none" else inactive_style
+        )
+        self.loop_list_btn.setStyleSheet(
+            active_style if mode == "list" else inactive_style
+        )
+        self.loop_song_btn.setStyleSheet(
+            active_style if mode == "song" else inactive_style
+        )
 
     # ── Music scan
     def scan_music(self):
-        return [p for p in MUSIC_DIR.rglob("*") if p.is_file() and p.suffix.lower() in EXTENSIONS]
+        return [
+            p
+            for p in MUSIC_DIR.rglob("*")
+            if p.is_file() and p.suffix.lower() in EXTENSIONS
+        ]
 
     def refresh_ui(self):
         self.track_list = self.scan_music()
@@ -320,7 +347,9 @@ class MusicPlayer(QMainWindow):
         for p, w in self.track_rows.items():
             w.setStyleSheet("")
         if path in self.track_rows:
-            self.track_rows[path].setStyleSheet("background-color: #333333; border-radius: 5px;")
+            self.track_rows[path].setStyleSheet(
+                "background-color: #333333; border-radius: 5px;"
+            )
         self.update_play_buttons(path)
 
     def play_track(self, path: Path):
@@ -379,7 +408,9 @@ class MusicPlayer(QMainWindow):
             cur_sec = int(pos_sec % 60)
             dur_min = int(duration_sec // 60)
             dur_sec = int(duration_sec % 60)
-            self.time_label.setText(f"{cur_min}:{cur_sec:02} / {dur_min}:{dur_sec:02}")
+            self.time_label.setText(
+                f"{cur_min}:{cur_sec:02} / {dur_min}:{dur_sec:02}"
+            )
 
     def start_seek(self):
         self.user_seeking = True

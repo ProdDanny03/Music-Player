@@ -61,7 +61,7 @@ class TrackPlayer:
         self.volume = 1.0
         self.paused = False
         self.current_frame = 0
-        self.finished_callback: Callable[[], None] | None = None  # Type hint
+        self.finished_callback: Callable[[], None] | None = None
 
     def callback(self, outdata, frames, time, status):
         if status:
@@ -172,7 +172,7 @@ class MusicPlayer(QMainWindow):
         self.current_track = None
         self.current_volume = 100
         self.user_seeking = False
-        self.loop_mode = "none"  # default loop mode
+        self.loop_mode = "none"
 
         self.ui_signals = UiSignalBridge()
         self.ui_signals.refresh_requested.connect(self.refresh_ui)
@@ -224,7 +224,6 @@ class MusicPlayer(QMainWindow):
         self.loop_list_btn.clicked.connect(lambda: self.set_loop_mode("list"))
         self.loop_song_btn.clicked.connect(lambda: self.set_loop_mode("song"))
 
-        # Apply default loop mode highlight
         self.set_loop_mode("none")
 
         # ── Volume controls frame
@@ -268,7 +267,7 @@ class MusicPlayer(QMainWindow):
     # ── Loop Mode
     def set_loop_mode(self, mode):
         self.loop_mode = mode
-        active_style = "background-color: #bb0066;"  # slightly darker pink
+        active_style = "background-color: #bb0066;"
         inactive_style = "background-color: deeppink;"
 
         self.loop_none_btn.setStyleSheet(

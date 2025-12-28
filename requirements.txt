@@ -1,0 +1,14 @@
+cffi==2.0.0
+nuitka==2.8.9
+numpy==2.4.0
+ordered-set==4.1.0
+pip==25.3
+pycparser==2.23
+pyside6==6.10.1
+pyside6-addons==6.10.1
+pyside6-essentials==6.10.1
+shiboken6==6.10.1
+sounddevice==0.5.3
+soundfile==0.13.1
+watchdog==6.0.0
+zstandard==0.25.0

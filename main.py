@@ -1,25 +1,26 @@
 import sys
-from pathlib import Path
-from threading import Thread, Lock
 from collections.abc import Callable
+from pathlib import Path
+from threading import Lock, Thread
+
 import numpy as np
 import sounddevice as sd
 import soundfile as sf
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from PySide6.QtCore import QObject, Qt, QTimer, Signal
 from PySide6.QtWidgets import (
     QApplication,
-    QMainWindow,
-    QWidget,
-    QVBoxLayout,
+    QFrame,
+    QHBoxLayout,
     QLabel,
+    QMainWindow,
     QPushButton,
     QScrollArea,
     QSlider,
-    QHBoxLayout,
-    QFrame,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, QObject, Signal, QTimer
+from watchdog.events import FileSystemEventHandler
+from watchdog.observers import Observer
 
 APP_STYLE = """
 QMainWindow { background-color: #1E1E1E; }
